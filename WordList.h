@@ -8,11 +8,8 @@
 #include <map>
 #include <vector>
 #include <string>
+#include "letter.h"
 
-struct Letter {
-    char letter;
-    bool guessed;
-};
 
 class WordList {
 private:
