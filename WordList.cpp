@@ -57,16 +57,24 @@ void WordList::process_guess(int guess_num, string guess) {
     to_upper_case(&guess);
     string results;
     //loop through each letter of the guess
-    for(int i = 0; i < 5; i++) {
 
-        if(guess[i] == selected_word[i]) {
+    for(int i = 0; i < 5; i++) {
+        bool remove_letter = true;
+        for (char c: selected_word) {
+            if (guess[i] == c) {
+                remove_letter = false;
+            }
+        }
+        if (guess[i] == selected_word[i]) {
             results.push_back(guess[i]);
             keyboard.update_letter(guess[i], LS_FoundPlaced);
         } else {
             results.push_back('*');
         }
+        if (remove_letter) {
+            keyboard.update_letter(guess[i], LS_Removed);
+        }
     }
-
     guess_results[guess_num] = results;
 }
 

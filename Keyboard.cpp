@@ -10,19 +10,12 @@
 using namespace std;
 
 Keyboard::Keyboard() {
-
-    const string row1 = "qwertyuiop";
-    const string row2 = "asdfghjkl";
-    const string row3 = "zxcvbnm";
-
-    make_row(0, row1);
-    make_row(1, row2);
-    make_row(2, row3);
-
+    make_row(0, "qwertyuiop");
+    make_row(1, "asdfghjkl");
+    make_row(2, "zxcvbnm");
 }
 
 void Keyboard::make_row(const int& i, const string& s) {
-
     map<int, Letter> row;
     for(int j = 0; j < s.size(); j++) {
         row[j] = Letter{s[j], LS_Unknown};
@@ -31,7 +24,7 @@ void Keyboard::make_row(const int& i, const string& s) {
 }
 
 void Keyboard::print_keyboard() {
-    string spacer = "";
+    string spacer;
     for(auto& row: key_map) {
         cout << spacer;
         for(auto& letter: row.second) {
