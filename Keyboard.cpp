@@ -64,7 +64,11 @@ void Keyboard::update_letter(char c, Letter_State ls) {
         }
         ++row;
     }
-    key_map[row_id][letter_id].letter_state = ls;
+
+    Letter_State current_state = key_map[row_id][letter_id].letter_state;
+    if(current_state != LS_FoundPlaced) {
+        key_map[row_id][letter_id].letter_state = ls;
+    }
 }
 
 void Keyboard::dump_key_map() {
@@ -73,4 +77,21 @@ void Keyboard::dump_key_map() {
             cout << letter.second.letter << " : " << letter.second.letter_state << endl;
         }
     }
+}
+
+Letter_State Keyboard::get_letter_state(char c) {
+
+    auto row = key_map.begin();
+    while (row != key_map.end()) {
+        auto letters = row->second.begin();
+        while(letters != row->second.end()) {
+            if(letters->second.letter == tolower(c)) {
+                return letters->second.letter_state;
+            }
+            letters++;
+        }
+        row++;
+    }
+
+    throw "ERROR";
 }

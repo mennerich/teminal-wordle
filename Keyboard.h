@@ -19,6 +19,7 @@ public:
     void dump_key_map();
     void print_keyboard();
     void update_letter(char, Letter_State);
+    Letter_State get_letter_state(char);
 };
 
 

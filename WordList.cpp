@@ -60,19 +60,37 @@ void WordList::process_guess(int guess_num, string guess) {
 
     for(int i = 0; i < 5; i++) {
         bool remove_letter = true;
+        bool found_placed_letter = false;
+
         for (char c: selected_word) {
             if (guess[i] == c) {
                 remove_letter = false;
             }
         }
+
         if (guess[i] == selected_word[i]) {
-            results.push_back(guess[i]);
+            char c = toupper(guess[i]);
+            results.push_back('[');
+            results.push_back(c);
+            results.push_back(']');
+            found_placed_letter = true;
             keyboard.update_letter(guess[i], LS_FoundPlaced);
         } else {
-            results.push_back('*');
+
         }
+
         if (remove_letter) {
             keyboard.update_letter(guess[i], LS_Removed);
+            results.push_back(' ');
+            results.push_back(char(tolower(guess[i])));
+            results.push_back(' ');
+        } else {
+            if(!found_placed_letter) {
+                keyboard.update_letter(guess[i], LS_Found);
+                results.push_back('[');
+                results.push_back(char(tolower(guess[i])));
+                results.push_back(']');
+            }
         }
     }
     guess_results[guess_num] = results;
@@ -83,7 +101,7 @@ void WordList::print_guess_history() {
     for(auto & guess : guess_results) {
         cout << guess.first << ".    ";
         for (auto & letter: guess.second) {
-            cout << " " << letter << "  ";
+            cout << letter;
         }
         cout << endl;
 
