@@ -61,6 +61,7 @@ void WordList::process_guess(int guess_num, string guess) {
 
         if(guess[i] == selected_word[i]) {
             results.push_back(guess[i]);
+            keyboard.update_letter(guess[i], LS_FoundPlaced);
         } else {
             results.push_back('*');
         }
@@ -74,7 +75,7 @@ void WordList::print_guess_history() {
     for(auto & guess : guess_results) {
         cout << guess.first << ".    ";
         for (auto & letter: guess.second) {
-            cout << letter << " ";
+            cout << " " << letter << "  ";
         }
         cout << endl;
 

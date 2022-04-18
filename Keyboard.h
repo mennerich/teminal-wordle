@@ -13,9 +13,12 @@ class Keyboard {
 private:
     std::map<int,std::map<int, Letter>> key_map;
     void make_row(const int&, const std::string&);
+
 public:
     Keyboard();
+    void dump_key_map();
     void print_keyboard();
+    void update_letter(char, Letter_State);
 };
 
 

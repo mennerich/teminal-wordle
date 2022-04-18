@@ -9,10 +9,11 @@
 #include <vector>
 #include <string>
 #include "letter.h"
-
+#include "Keyboard.h"
 
 class WordList {
 private:
+    Keyboard keyboard;
     std::vector<std::string> words;
     std::map<int, std::string> guess_results;
     std::string selected_word;
@@ -26,6 +27,7 @@ public:
     bool guess_selected_word(std::string);
     void process_guess(int guess_num, std::string);
     void print_guess_history();
+    void print_keyboard() { keyboard.print_keyboard(); };
 };
 
 
