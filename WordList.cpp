@@ -83,14 +83,12 @@ void WordList::process_guess(int guess_num, string guess) {
 }
 
 void WordList::print_guess_history() {
-
     for (auto &guess: guess_results) {
         cout << guess.first << ".    ";
         for (auto &letter: guess.second) {
             cout << letter;
         }
         cout << endl;
-
     }
 }
 
