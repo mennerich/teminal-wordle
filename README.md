@@ -1,2 +1,2 @@
-# terminal-wordle
-a cli wordle game to explore c++
+# tword
+a cli wordle-like game to explore c++
