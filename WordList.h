@@ -8,7 +8,6 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "letter.h"
 #include "Keyboard.h"
 
 class WordList {

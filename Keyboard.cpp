@@ -80,7 +80,6 @@ void Keyboard::dump_key_map() {
 }
 
 Letter_State Keyboard::get_letter_state(char c) {
-
     auto row = key_map.begin();
     while (row != key_map.end()) {
         auto letters = row->second.begin();
@@ -92,4 +91,5 @@ Letter_State Keyboard::get_letter_state(char c) {
         }
         row++;
     }
+    return LS_Error;
 }

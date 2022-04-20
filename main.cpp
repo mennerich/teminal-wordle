@@ -81,10 +81,10 @@ void parse_arguments(int & argc, char* argv[]) {
 
 static void usage(const string& name)
 {
-    cerr << "Usage: " << name << " <option(s)> SOURCES\n"
+    cerr << "Usage: " << name << " <option(s)>\n"
               << "Options:\n"
               << "\t-h,--help\t\tShow this help message\n"
               << "\t-d,--debug\tDisplay debug messages"
-              << endl;
-    exit(1);
+              << endl << endl;
+    exit(0);
 }
