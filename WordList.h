@@ -14,15 +14,15 @@
 class WordList {
 private:
     Keyboard keyboard;
-    std::vector<std::string> words;
+    static std::vector<std::string> words;
     std::map<int, std::string> guess_results;
     std::string selected_word;
-    void to_upper_case(std::string *);
+    static void to_upper_case(std::string *);
 
 public:
     WordList();
-    int get_length();
-    bool contains_word(std::string);
+    static int get_length();
+    static bool contains_word(std::string);
     std::string get_selected_word();
     bool guess_selected_word(std::string);
     void process_guess(int guess_num, std::string);
