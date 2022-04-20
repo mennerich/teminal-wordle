@@ -10,7 +10,7 @@
 using namespace std;
 
 WordList::WordList() {
-    ifstream dict("/usr/share/dict/english");
+    ifstream dict("/usr/share/dict/nyt");
     if (dict.is_open()) {
         string line;
         while (getline(dict, line)) {
@@ -44,6 +44,7 @@ int WordList::get_length() {
 }
 
 bool WordList::contains_word(string word) {
+    to_upper_case(&word);
     for(auto &w : words) {
         if(w == word) {
             return true;
