@@ -13,7 +13,8 @@
 class WordList {
 private:
     Keyboard keyboard;
-    static std::vector<std::string> words;
+    static std::vector<std::string> solutions;
+    static std::vector<std::string> valid_words;
     std::map<int, std::string> guess_results;
     std::string selected_word;
     static void to_upper_case(std::string *);
