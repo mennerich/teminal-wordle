@@ -327,6 +327,7 @@ vector<string> WordList::solutions = {
         "ADULT", "JUDGE", "ROWER", "ARTSY", "RURAL", "SHAVE"
 };
 
+//valid word list from https://raw.githubusercontent.com/tabatkins/wordle-list/main/words
 vector<string> WordList::valid_words = {
         "WOMEN", "NIKAU", "SWACK", "FEENS", "FYLES", "POLED", "CLAGS", "STARN", "BINDI", "WOOPS", "FANOS",
         "CABIN", "SOUCT", "TRASS", "SHOAT", "LEFTY", "DURRA", "HYPES", "JUNTA", "BAISA", "BISES", "KIPPS",

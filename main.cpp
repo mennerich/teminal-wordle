@@ -11,7 +11,7 @@ void parse_arguments(int&, char**);
 bool debug = false;
 
 int main(int argc, char* argv[]) {
-    const string version = "v0.1.0-alpha";
+    const string version = "v0.1.1-beta";
     parse_arguments(argc, argv);
     word_list = new WordList();
 
