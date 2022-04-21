@@ -14,7 +14,6 @@ int main(int argc, char* argv[]) {
     const string version = "v0.1.0-alpha";
     parse_arguments(argc, argv);
     word_list = new WordList();
-    system("clear");
 
     for (int i = 1; i <= 6; i++) {
         system("clear");
@@ -22,7 +21,7 @@ int main(int argc, char* argv[]) {
             cout << "[DEBUG] selected word:" << word_list->get_selected_word() << endl;
         }
         cout << "TWORD, " << version << endl;
-        cout << endl;
+
         string guess;
         bool valid_guess = false;
         if (i > 1) {
@@ -32,7 +31,7 @@ int main(int argc, char* argv[]) {
         }
 
         while (!valid_guess) {
-            cout << "Guess the word (" << i << "/6) : ";
+            cout << "\nGuess the word (" << i << "/6) : ";
             cin >> guess;
             valid_guess = validate_guess(guess);
         }
