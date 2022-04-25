@@ -1,28 +1,46 @@
 #include <iostream>
+#include "main.h"
 #include "WordList.h"
-#include "Keyboard.h"
 #include "database.h"
 
 using namespace std;
 
-bool validate_guess(const string&);
-static void usage(const string &);
-void parse_arguments(int&, char**);
 bool debug = false;
+string version;
 
-int main(int argc, char* argv[]) {
-    const string version = "v0.1.1-beta";
+int main(int argc, char *argv[]) {
+    version = "v0.1.2-beta";
     parse_arguments(argc, argv);
-    WordList word_list;
 
     Database db(debug);
-    if(!db.exists()) {
+    if (!db.exists()) {
         db.create();
     }
 
+    bool quit = false;
+    while (!quit) {
+        auto result = game();
+        if (result > 0) {
+            db.insert_game(true, result);
+        } else {
+            db.insert_game(false, 0);
+        }
+
+        string response;
+        cout << "Play Again Y/N: ";
+        cin >> response;
+        if (response != "Y") {
+            quit = true;
+        }
+    }
+
+}
+
+int game() {
+    WordList word_list;
     for (int i = 1; i <= 6; i++) {
         system("clear");
-        if(debug) {
+        if (debug) {
             cout << "[DEBUG] selected word:" << word_list.get_selected_word() << endl;
         }
         cout << "TWORD, " << version << endl;
@@ -45,8 +63,7 @@ int main(int argc, char* argv[]) {
 
         if (word_list.guess_selected_word(guess)) {
             cout << "\nYou won, the secret word was: " << word_list.get_selected_word() << endl;
-            db.insert_game(true, i);
-            return 0;
+            return i;
         }
     }
 
@@ -54,11 +71,10 @@ int main(int argc, char* argv[]) {
     cout << "TWORD, " << version << endl << endl;
     word_list.print_guess_history();
     cout << "\nSorry, The secret word was: " << word_list.get_selected_word() << endl;
-    db.insert_game(false, 0);
     return 0;
 }
 
-bool validate_guess(const string& guess) {
+bool validate_guess(const string &guess) {
     if (guess.size() != 5) {
         cout << "!! " << guess << " is not a 5-letter word" << endl;
         return false;
@@ -72,7 +88,7 @@ bool validate_guess(const string& guess) {
     return true;
 }
 
-void parse_arguments(int & argc, char* argv[]) {
+void parse_arguments(int &argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if ((arg == "-h") || (arg == "--help")) {
@@ -85,12 +101,11 @@ void parse_arguments(int & argc, char* argv[]) {
     }
 }
 
-static void usage(const string& name)
-{
+static void usage(const string &name) {
     cerr << "Usage: " << name << " <option(s)>\n"
-              << "Options:\n"
-              << "\t-h,--help\t\tShow this help message\n"
-              << "\t-d,--debug\tDisplay debug messages"
-              << endl << endl;
+         << "Options:\n"
+         << "\t-h,--help\t\tShow this help message\n"
+         << "\t-d,--debug\tDisplay debug messages"
+         << endl << endl;
     exit(0);
 }
