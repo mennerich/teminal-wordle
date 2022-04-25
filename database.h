@@ -10,11 +10,12 @@
 
 class Database {
 private:
-    std::string db_loc = "/home/donald/.config/tword.sql";
+    bool debug;
+    std::string db_loc;
     sqlite3 *tword_db;
-    std::string get_home();
 
 public:
+    explicit Database(bool);
     bool exists();
     void create();
     void insert_game(bool result, int round_num);

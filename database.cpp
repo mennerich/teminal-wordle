@@ -5,10 +5,20 @@
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
+#include <filesystem>
 #include "database.h"
 #include "sqlite3.h"
 
 using namespace std;
+
+Database::Database(bool debug_i) {
+    debug = debug_i;
+    filesystem::path home = getenv("HOME");
+    filesystem::path local = ".local";
+    filesystem::path db = "tword.db";
+    filesystem::path db_path = home / local / db;
+    db_loc = db_path.generic_string();
+}
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName){
     cout << "HI";
@@ -23,7 +33,9 @@ bool Database::exists() {
 void Database::open() {
     int db_open = sqlite3_open(db_loc.c_str(), &tword_db);
     if(!db_open) {
-        cout << "DB Opened" << endl;
+        if(debug) {
+            cout << "DB Opened" << endl;
+        }
     } else {
         cerr << "DB Error: " << sqlite3_errmsg(tword_db) << endl;
     }
@@ -32,14 +44,18 @@ void Database::open() {
 void Database::close() {
     int db_close = sqlite3_close(tword_db);
     if(!db_close) {
-        cout << "DB Closed" << endl;
+        if(debug) {
+            cout << "DB Closed" << endl;
+        }
     } else {
         cerr << "DB ERROR: " <<sqlite3_errmsg(tword_db) << endl;
     }
 }
 
 void Database::create() {
-    cout << "Creating Database" << endl;
+    if(debug) {
+        cout << "Creating Database" << endl;
+    }
     open();
     string stmt = "CREATE TABLE RESULTS ("  \
       "ID INTEGER PRIMARY KEY AUTOINCREMENT," \
@@ -47,10 +63,11 @@ void Database::create() {
       "ROUND_NUM INT);";
 
     char *zErrMsg = nullptr;
-    cout << stmt << endl;
     int create_table = sqlite3_exec(tword_db, stmt.c_str(), callback, nullptr, &zErrMsg);
     if (create_table) {
-        cerr << "DB Table Create Error: " << sqlite3_errmsg(tword_db) << endl;
+        if(debug) {
+            cerr << "DB Table Create Error: " << sqlite3_errmsg(tword_db) << endl;
+        }
     } else {
         cout << "Table Created Successfully!" << endl;
     }
@@ -66,7 +83,9 @@ void Database::insert_game(bool result, int round_num) {
     if(insert) {
         cerr << "DB Data Insert Error: " << sqlite3_errmsg(tword_db) << endl;
     } else {
-        cout << "DB Data Inserted Successfully!" << endl;
+        if(debug) {
+            cout << "DB Data Inserted Successfully!" << endl;
+        }
     }
     close();
 }

@@ -10,12 +10,12 @@ static void usage(const string &);
 static WordList *word_list;
 void parse_arguments(int&, char**);
 bool debug = false;
-Database db;
 
 int main(int argc, char* argv[]) {
     const string version = "v0.1.1-beta";
     parse_arguments(argc, argv);
     word_list = new WordList();
+    Database db(debug);
     if(!db.exists()) {
         db.create();
     }
