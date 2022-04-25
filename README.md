@@ -1,7 +1,7 @@
 # tword
 a cli wordle-like game to explore c++
 
-##Usage
+## Usage
 Usage: tword <option(s)><br>
 Options:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-h,--help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Show this help message<br>
