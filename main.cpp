@@ -1,6 +1,7 @@
 #include <iostream>
 #include "WordList.h"
 #include "Keyboard.h"
+#include "database.h"
 
 using namespace std;
 
@@ -9,11 +10,15 @@ static void usage(const string &);
 static WordList *word_list;
 void parse_arguments(int&, char**);
 bool debug = false;
+Database db;
 
 int main(int argc, char* argv[]) {
-    const string version = "v0.1.0-beta";
+    const string version = "v0.1.1-beta";
     parse_arguments(argc, argv);
     word_list = new WordList();
+    if(!db.exists()) {
+        db.create();
+    }
 
     for (int i = 1; i <= 6; i++) {
         system("clear");
@@ -40,6 +45,7 @@ int main(int argc, char* argv[]) {
 
         if (word_list->guess_selected_word(guess)) {
             cout << "\nYou won, the secret word was: " << word_list->get_selected_word() << endl;
+            db.insert_game(true, i);
             return 0;
         }
     }
@@ -48,6 +54,7 @@ int main(int argc, char* argv[]) {
     cout << "TWORD, " << version << endl << endl;
     word_list->print_guess_history();
     cout << "\nSorry, The secret word was: " << word_list->get_selected_word() << endl;
+    db.insert_game(false, 0);
     return 0;
 }
 
