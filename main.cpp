@@ -7,14 +7,14 @@ using namespace std;
 
 bool validate_guess(const string&);
 static void usage(const string &);
-static WordList *word_list;
 void parse_arguments(int&, char**);
 bool debug = false;
 
 int main(int argc, char* argv[]) {
     const string version = "v0.1.1-beta";
     parse_arguments(argc, argv);
-    word_list = new WordList();
+    WordList word_list;
+
     Database db(debug);
     if(!db.exists()) {
         db.create();
@@ -23,16 +23,16 @@ int main(int argc, char* argv[]) {
     for (int i = 1; i <= 6; i++) {
         system("clear");
         if(debug) {
-            cout << "[DEBUG] selected word:" << word_list->get_selected_word() << endl;
+            cout << "[DEBUG] selected word:" << word_list.get_selected_word() << endl;
         }
         cout << "TWORD, " << version << endl;
 
         string guess;
         bool valid_guess = false;
         if (i > 1) {
-            word_list->print_guess_history();
+            word_list.print_guess_history();
             cout << "\n------------------------------" << endl;
-            word_list->print_keyboard();
+            word_list.print_keyboard();
         }
 
         while (!valid_guess) {
@@ -41,10 +41,10 @@ int main(int argc, char* argv[]) {
             valid_guess = validate_guess(guess);
         }
 
-        word_list->process_guess(i, guess);
+        word_list.process_guess(i, guess);
 
-        if (word_list->guess_selected_word(guess)) {
-            cout << "\nYou won, the secret word was: " << word_list->get_selected_word() << endl;
+        if (word_list.guess_selected_word(guess)) {
+            cout << "\nYou won, the secret word was: " << word_list.get_selected_word() << endl;
             db.insert_game(true, i);
             return 0;
         }
@@ -52,8 +52,8 @@ int main(int argc, char* argv[]) {
 
     system("clear");
     cout << "TWORD, " << version << endl << endl;
-    word_list->print_guess_history();
-    cout << "\nSorry, The secret word was: " << word_list->get_selected_word() << endl;
+    word_list.print_guess_history();
+    cout << "\nSorry, The secret word was: " << word_list.get_selected_word() << endl;
     db.insert_game(false, 0);
     return 0;
 }
