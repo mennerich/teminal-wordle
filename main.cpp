@@ -14,18 +14,24 @@ int main(int argc, char *argv[]) {
 
     Database db(debug);
     if (!db.exists()) {
+        if(debug) {
+            cout << db.get_db_location() << " does not exist" << endl;
+        }
         db.create();
     }
-
+    db.open();
     bool quit = false;
     while (!quit) {
-        auto result = game();
+        int result = game();
+        if(debug) {
+            cout << "[DEBUG] INSERTING " << result << " To Database." << endl;
+        }
         if (result > 0) {
             db.insert_game(true, result);
         } else {
             db.insert_game(false, 0);
         }
-
+        db.get_statistics();
         string response;
         cout << "Play Again Y/N: ";
         cin >> response;
@@ -33,6 +39,7 @@ int main(int argc, char *argv[]) {
             quit = true;
         }
     }
+    db.close();
 
 }
 

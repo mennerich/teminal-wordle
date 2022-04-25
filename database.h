@@ -7,6 +7,13 @@
 
 #include <string>
 #include <sqlite3.h>
+#include <vector>
+
+struct Result {
+    int id;
+    bool won;
+    int  round_num;
+};
 
 class Database {
 private:
@@ -16,11 +23,13 @@ private:
 
 public:
     explicit Database(bool);
+    std::string get_db_location() { return db_loc; };
     bool exists();
     void create();
     void insert_game(bool result, int round_num);
     void open();
     void close();
+    void get_statistics();
 };
 
 
