@@ -6,6 +6,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <filesystem>
+#include <map>
 #include "database.h"
 #include "sqlite3.h"
 
@@ -90,9 +91,9 @@ void Database::insert_game(bool result, int round_num) {
 }
 
 void Database::get_statistics() {
-    cout << "== Statistics == " << endl;
+    cout << "\n== Statistics == " << endl;
     vector<Result> results{};
-    string stmt = "SELECT * FROM 'RESULTS'";
+    string stmt = "SELECT * FROM RESULTS ORDER BY ID DESC";
     char *zErrMsg = nullptr;
 
     int db_select = sqlite3_exec(tword_db, stmt.c_str(), callback, &results, &zErrMsg);
@@ -104,16 +105,29 @@ void Database::get_statistics() {
         }
 
         int games_won = 0;
+        map<int, int> distro {{1, 0}, {2,0}, {3,0}, {4,0}, {5, 0}, {6,0} };
         for(auto &result: results) {
             if(debug) {
                 cout << "ID: " << result.id << " WON: " << result.won << " ROUND#: " << result.round_num << endl;
+            }
+            if(result.won > 0) {
+                distro[result.round_num] = distro[result.round_num] + 1;
             }
             if(result.won) {
                 games_won++;
             }
         }
-        cout << "# Games played: " << results.size() << endl;
-        cout << "# Games won: " << games_won << endl;
+
+        cout << "Games played: " << results.size() << endl;
+        auto percent = (games_won * 100) / results.size();
+        cout << "Win %: " << percent << endl;
+        cout << "Current Streak: " << endl;
+        cout << "Max Streak: " << endl;
+        cout << "\n== Guess Distribution ==" << endl;
+        for(int i = 1; i <= 6; i++) {
+            cout << i << ": " << distro[i] << endl;
+        }
+        cout << endl;
     }
 }
 
