@@ -6,6 +6,7 @@
 using namespace std;
 
 bool debug = false;
+bool reset = false;
 string version;
 
 int main(int argc, char *argv[]) {
@@ -19,7 +20,15 @@ int main(int argc, char *argv[]) {
         }
         db.create();
     }
+
+    //open the database for the game
     db.open();
+
+    //delete all results if -r flag is set
+    if(reset) {
+        db.clear_data();
+    }
+
     bool quit = false;
     while (!quit) {
         int result = game();
@@ -39,6 +48,8 @@ int main(int argc, char *argv[]) {
             quit = true;
         }
     }
+
+    //close the database connection
     db.close();
 
 }
@@ -98,10 +109,18 @@ bool validate_guess(const string &guess) {
 void parse_arguments(int &argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
+
+        //print the usage message
         if ((arg == "-h") || (arg == "--help")) {
             usage(argv[0]);
         }
 
+        //set the reset data flag
+        if ((arg == "-r") || arg == "--reset") {
+            reset = true;
+        }
+
+        //set the debug messages flag
         if ((arg == "-d") || (arg == "--debug")) {
             debug = true;
         }
@@ -112,7 +131,8 @@ static void usage(const string &name) {
     cerr << "Usage: " << name << " <option(s)>\n"
          << "Options:\n"
          << "\t-h,--help\t\tShow this help message\n"
-         << "\t-d,--debug\tDisplay debug messages"
-         << endl << endl;
+         << "\t-d,--debug\tDisplay debug messages\n"
+         << "\t-r, --reset\tClear statistical data\n"
+         << endl;
     exit(0);
 }

@@ -58,7 +58,7 @@ void Database::create() {
     if(debug) {
         cout << "[DEBUG] Creating Database" << endl;
     }
-
+    open();
     string stmt = "CREATE TABLE RESULTS ("  \
       "ID INTEGER PRIMARY KEY AUTOINCREMENT," \
       "RESULT BOOL NOT NULL," \
@@ -73,6 +73,7 @@ void Database::create() {
     } else {
         cout << "[DEBUG] Table Created Successfully!" << endl;
     }
+    close();
 }
 
 void Database::insert_game(bool result, int round_num) {
@@ -107,9 +108,6 @@ void Database::get_statistics() {
         int games_won = 0;
         map<int, int> distro {{1, 0}, {2,0}, {3,0}, {4,0}, {5, 0}, {6,0} };
         for(auto &result: results) {
-            if(debug) {
-                cout << "ID: " << result.id << " WON: " << result.won << " ROUND#: " << result.round_num << endl;
-            }
             if(result.won > 0) {
                 distro[result.round_num] = distro[result.round_num] + 1;
             }
@@ -121,13 +119,69 @@ void Database::get_statistics() {
         cout << "Games played: " << results.size() << endl;
         auto percent = (games_won * 100) / results.size();
         cout << "Win %: " << percent << endl;
-        cout << "Current Streak: " << endl;
-        cout << "Max Streak: " << endl;
+        streaks(results);
         cout << "\n== Guess Distribution ==" << endl;
         for(int i = 1; i <= 6; i++) {
             cout << i << ": " << distro[i] << endl;
         }
+
         cout << endl;
+    }
+}
+
+void Database::streaks(std::vector<Result> results) {
+
+        bool current_win_streak_found  = false;
+        int current_win_streak = 0;
+        int max_win_streak = 0;
+
+        int win_streak = 0;
+
+        for(int i = 0; i < results.size(); i++) {
+            auto & result = results[i];
+            if(i == 0) {
+                if(!result.won ) {
+                    current_win_streak_found = true;
+                    current_win_streak = 0;
+                    continue;
+                } else {
+                    win_streak++;
+                    current_win_streak++;
+                    continue;
+                }
+            }
+
+            if(!result.won) {
+                if(!current_win_streak_found) {
+                    current_win_streak_found = true;
+                }
+
+                if(win_streak > max_win_streak) {
+                    max_win_streak = win_streak;
+                }
+
+                win_streak = 0;
+                continue;
+            } else {
+                if(!current_win_streak_found) {
+                    current_win_streak++;
+                }
+                win_streak++;
+                continue;
+            }
+        }
+
+        cout << "current win streak: " << current_win_streak << endl;
+        cout << "max win streak: " << max_win_streak << endl;
+}
+
+void Database::clear_data() {
+    string stmt = "DELETE FROM RESULTS";
+    char *zErrMsg = nullptr;
+    if(sqlite3_exec(tword_db, stmt.c_str(), callback, nullptr, &zErrMsg)) {
+        cerr << "DB Data Deletion Error: " << sqlite3_errmsg(tword_db) << endl;
+    } else {
+            cout << "DB Data Deleted Successfully" << endl;
     }
 }
 

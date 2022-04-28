@@ -20,6 +20,7 @@ private:
     bool debug;
     std::string db_loc;
     sqlite3 *tword_db;
+    static void streaks(std::vector<Result>);
 
 public:
     explicit Database(bool);
@@ -29,6 +30,7 @@ public:
     void insert_game(bool result, int round_num);
     void open();
     void close();
+    void clear_data();
     void get_statistics();
 };
 
